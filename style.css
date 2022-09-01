@@ -8,3 +8,9 @@
     padding: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+#container {
+    width: 200px;
+    height: 300px;
+    border: 1px solid black;
+}
