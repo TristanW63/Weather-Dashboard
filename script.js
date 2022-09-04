@@ -2,20 +2,29 @@ const searchEL = document.getElementById("searchText");
 const submitEl = document.getElementById("submit");
 const userFormEl = document.getElementById("form1")
 
+
 var formSubmit = function (event) {
   event.preventDefault();
 
   var city = searchEL.value.trim();
-
+  var state = searchEL.value.trim();
+  var cityState = city + state;
   if (city) {
     getInputText(city);
+
+    searchEL.value = '';
+
+  } else if (state) {
+    getInputText(state);
 
     searchEL.value = '';
   }
 };
 
+
+const API = `42bd4df4c8216e16be280cf95790436b`;
 var getInputText = function (city) {
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=42bd4df4c8216e16be280cf95790436b';
+  var apiUrl = `api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${API}`;
 
   fetch(apiUrl)
   .then(function (response) {
@@ -42,5 +51,5 @@ $('.wind').empty().append(wind);
 
 userFormEl.addEventListener('submit', formSubmit);
 
-var gradDate = moment().subtract(10, 'days').calendar();;
+var gradDate = moment().format('L');;
 $("#1a").text(gradDate);
