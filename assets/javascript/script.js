@@ -42,3 +42,41 @@ function displayCurrentWeather (myCity) {
      $(".current-humid").text("Humidity: " + response.main.humidity + "%");
      $(".current-wind").text("Wind Speed: " + response.wind.speed + " MPH");
 
+
+     //gets coordinates for the UV index
+     var apiURLuvi = "https://api.openweathermap.org/data/2.5/uvi?appid=" +
+     APIKey +
+     "&lat=" +
+     response.coord.lat +
+     "&lon=" +
+     response.coord.lon;
+
+     fetch(apiURLuvi)
+  .then(function (response) {
+      console.log(response);
+      console.log(apiURLuvi);
+      var newIndex = [
+        //dynamicly displays current UV index and wether or not its good or bad
+        $("<span>").text("UV Index: "),
+        $("<button>").text(response.value).attr("id", "uv-button"),
+      ];
+      $(".current-uv").empty();
+        $(".current-uv").append(newIndex);
+        if (response.value <= 3) {
+          //if uv index is low
+          $("#uv-button").addClass("btn btn-success");
+        } else if (response.value >= 7) {
+          //if uv index is high
+          $("#uv-button").addClass("btn btn-danger");
+        } else $("#uv-button").addClass("btn btn-warning");
+      })
+      .catch(function (error) {});
+  });
+}
+
+// displays cureent weather dynamicly
+function ForecastCard(data) {
+  console.log("data", data);
+  var currentDate = data.dt_text;
+  var currentDateFormat = moment(currentDate).format("MM/DD/YYYY");
+}
