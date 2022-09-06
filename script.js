@@ -1,9 +1,10 @@
-const searchEL = document.getElementById("searchText");
-const submitEl = document.getElementById("submit");
-const userFormEl = document.getElementById("form1")
-var skillsListEl = $('#skills-list');
 var APIKey = "42bd4df4c8216e16be280cf95790436b";
-
+var searchHistory = JSON.parse(localStorage.getItem("search-name"));
+if (!searchHistory) {
+  searchHistory = [];
+  $("#search-history-results").css("display", "none");
+  $("#weather-results").css("display", "none");
+}
 var savedSearches = function (searched) {
   var listEl = $('<li>');
   var listDetail = searched.concat('');
@@ -53,7 +54,7 @@ var temp = Math.floor(data.main.temp) + "°F";
  $('.humidity').empty().append(humidity);
 $('.city').empty().append(city);
 $('.wind').empty().append(wind);
-});
+}); 
 }
 });
 };
