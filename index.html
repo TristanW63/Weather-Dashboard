@@ -5,35 +5,78 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href ="style.css" rel ="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
     <title>Weather Dashboard</title>
 </head>
 <div id="container">
 <header class="header">Weather Dashboard
 </header>
 <body>
-    <form name="form1" method="post" id="form1" class="searchbar">
-        <input name="Search" type="text" id="searchText" placeholder="Search for city"/>
-        <input type="submit" value="submit" id="submit">
-        </form>
-        <div class="col-6">
-            <h3>Recent Searches:</h3>
-            <br />
-            <ul class="list-group" id="skills-list"></ul>
+    <header class="jumbotron-fluid">
+      <h1>Local Weather Dashboard</h1>
+    </header>
+    <div class="row m-1">
+      <div class="col-md-3">
+        <div class="col-md">
+          <h2>Search for a city:</h2>
+          <div class="row mb-3">
+            <form class="m-3" id="city-form">
+              <input type="text" id="city-input" placeholder="City Name" />
+              <!-- Button triggers new city to be added to search -->
+              <button id="add-city" type="submit" value="searchCity">
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
           </div>
-        <p id="1a" class="date1"></p>
-        <div class="results1">
-        <p class="city"></p>
-        <img class="icon">
-        <p>Humidity:</p>
-        <p class="humidity"></p>
-        <p>Wind:</p>
-        <p class="wind"></p>
-        <p>Temp:</p>
-        <p class="temp"></p>
+
+          <div class="card m-1" id="search-history-results">
+            <ul class="list-group list-group-flush"></ul>
+          </div>
         </div>
+      </div>
+
+      <div class="col-md-9" id="weather-results">
+        <div class="row">
+          <div class="card m-2" style="width: 90%;">
+            <div class="card-body">
+              <div class="row ml-1">
+                <h2 class="main_card_city"></h2>
+                <h2 class="date"></h2>
+                <img class="weather-icon" />
+              </div>
+              <div class="current-temp"></div>
+              <div class="current-humid"></div>
+              <div class="current-wind"></div>
+              <div class="current-uv" id="index-bg"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row ml-3 mt-2">
+          <h2>5 Day Forecast</h2>
+        </div>
+        <div
+          class="row d-flex flex-row justify-content-between mb-5"
+          id="forecast-row"
+          style="width: 90%;"
+        ></div>
+      </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="./script.js"></script>
 </body>
 </html>
