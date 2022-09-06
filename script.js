@@ -2,6 +2,7 @@ const searchEL = document.getElementById("searchText");
 const submitEl = document.getElementById("submit");
 const userFormEl = document.getElementById("form1")
 var skillsListEl = $('#skills-list');
+var APIKey = "42bd4df4c8216e16be280cf95790436b";
 
 var savedSearches = function (searched) {
   var listEl = $('<li>');
@@ -31,19 +32,20 @@ var formSubmit = function (event) {
 };
 
 var getInputText = function (city) {
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&units=imperial&appid=42bd4df4c8216e16be280cf95790436b&cnt=40';
+  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + APIKey;
 
   fetch(apiUrl)
-  .then(response => response.json()) 
-    .then(forecast => {
-      forecast.list.forEach(day => {
+  .then(function (response) {
+    if (response.ok) {
+      console.log(response);
+      response.json().then(function (data) {
 
-        var icon = "http://openweathermap.org/img/w/" + day.weather[0].icon + ".png";
-var temp = Math.floor(day.main.temp) + "°F";
- var humidity = day.main.humidity + "%";
- var wind = day.wind.speed;
+        var icon = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
+var temp = Math.floor(data.main.temp) + "°F";
+ var humidity = data.main.humidity + "%";
+ var wind = data.wind.speed;
  document.getElementById("searchText").value;
-console.log(forecast.length)
+
 
 
  $('.icon').attr('src', icon);
@@ -51,10 +53,10 @@ console.log(forecast.length)
  $('.humidity').empty().append(humidity);
 $('.city').empty().append(city);
 $('.wind').empty().append(wind);
-        })
-    })
-
-      }
+});
+}
+});
+};
 
 userFormEl.addEventListener('submit', formSubmit);
 
