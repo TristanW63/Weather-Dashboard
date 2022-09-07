@@ -18,7 +18,7 @@ function displayWeather() {
 
 //gets current weather 
 function displayCurrentWeather (myCity) {
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + myCity + '&appid=' + APIKey;
+  var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + (myCity || "Nashville") + "&appid=" + APIKey;
 
   fetch(apiUrl)
   .then(function (response) {
@@ -33,7 +33,7 @@ function displayCurrentWeather (myCity) {
      //gets and displays current weather icon
      $(".weather-icon").attr(
       "src",
-      "http://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png"
+      "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
      );
       //gets and displays current weather data
      var kelvin = response.main.temp;
@@ -111,7 +111,7 @@ function ForecastCard(data) {
 
 //fetching and displaying five day forecast
 function displayFiveDayForecast(myCity) {
-  var apiURlForecast = 'https://api.openweathermap.org/data/2.5/forecast?q=' + myCity + '&appid=' + APIKey;
+  var apiURlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + (myCity || "Nashville") + "&appid=" + APIKey;
 
   fetch(apiURlForecast)
   .then(function (response) {
@@ -133,3 +133,47 @@ function displayFiveDayForecast(myCity) {
     }
   });
 }
+
+function recordSearchHistory() {
+  $(".list-group").empty();
+  for (var i = 0; i < searchHistory.length; i++){
+    console.log(searchHistory[i]);
+    var search = $("<li>");
+    search.addClass("city list-group-item");
+    search.attr("data-name", searchHistory[i]);
+    search.text(searchHistory[i]);
+    $(".list-group").append(search);
+  }
+  displayWeather();
+}
+$("#add-city").on("click", function (event) {
+  event.preventDefault();
+  $("#weather-results").attr("style", "display: block");
+  $("#search-history-results").attr("style", "display: block");
+  var city = $("#city-input").val().trim();
+  var queryURLcurrent =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    city +
+    "&appid=" +
+    APIKey;
+  $.ajax({
+    url: queryURLcurrent,
+    method: "GET",
+  })
+    .then(function (response) {
+      if (response.name) {
+        searchHistory.push(response.name);
+        localStorage.setItem("search-name", JSON.stringify(searchHistory));
+        recordSearchHistory();
+      } else {
+        $("#city-input").val("");
+      }
+    })
+    .catch(function (error) {
+      $("#city-input").val("");
+    });
+});
+
+$(document).on("click", ".city", displayWeather);
+
+recordSearchHistory();
