@@ -18,38 +18,38 @@ function displayWeather() {
 
 //gets current weather 
 function displayCurrentWeather (myCity) {
-  var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + (myCity || "Nashville") + "&appid=" + APIKey;
+  var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + (myCity || "Nashville") + "&units=imperial&appid=" + APIKey;
 
   fetch(apiUrl)
   .then(function (response) {
       console.log(response);
       console.log(apiUrl);
+      response.json().then(function (data) {
       //gets city name from response
-     $(".main_card_city").text(response.name);
+     $(".main_card_city").text(data.name);
      $(".date").html(
       //gets date from response
-      "&nbsp;(" + moment.unix(response.dt).format("MM/DD/YYYY") + `)`
+      "&nbsp;(" + moment.unix(data.dt).format("MM/DD/YYYY") + `)`
      );
      //gets and displays current weather icon
      $(".weather-icon").attr(
       "src",
-      "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
+      "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"
      );
       //gets and displays current weather data
-     var kelvin = response.main.temp;
-     var fahrenheit = ((kelvin - 273.15) * 1.8 + 32).toFixed(0);
-     $(".current-temp").html("Temperature: " + fahrenheit + "&deg;F");
-     $(".current-humid").text("Humidity: " + response.main.humidity + "%");
-     $(".current-wind").text("Wind Speed: " + response.wind.speed + " MPH");
+      var temp = Math.floor(data.main.temp) + "°F";
+     $(".current-temp").html("Temperature: " + temp );
+     $(".current-humid").text("Humidity: " + data.main.humidity + "%");
+     $(".current-wind").text("Wind Speed: " + data.wind.speed + " MPH");
 
 
      //gets coordinates for the UV index
      var apiURLuvi = "https://api.openweathermap.org/data/2.5/uvi?appid=" +
      APIKey +
      "&lat=" +
-     response.coord.lat +
+     data.coord.lat +
      "&lon=" +
-     response.coord.lon;
+     data.coord.lon;
 
      fetch(apiURLuvi)
   .then(function (response) {
@@ -72,6 +72,7 @@ function displayCurrentWeather (myCity) {
       })
       .catch(function (error) {});
   });
+})
 }
 
 // displays cureent weather dynamicly
@@ -115,13 +116,13 @@ function displayFiveDayForecast(myCity) {
 
   fetch(apiURlForecast)
   .then(function (response) {
-    
-    var days = response.list;
+    response.json().then(function (data) {
+    var days = data.list;
     var fiveDayList = 0;
 
     $("#forecast-row").empty();
     for (var i =0; i < fiveDayList < 5; i++) {
-      var timeString = response.list[i].dt_text.split(" ")[1].split(":")[0];
+      var timeString = data.list[i].dt_text.split(" ")[1].split(":")[0];
     
       if (timeString === "18") {
         fiveDayList++;
@@ -132,6 +133,7 @@ function displayFiveDayForecast(myCity) {
       }
     }
   });
+})
 }
 
 function recordSearchHistory() {
