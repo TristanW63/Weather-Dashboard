@@ -18,7 +18,7 @@ function displayWeather() {
 
 //gets current weather 
 function displayCurrentWeather (myCity) {
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + APIKey;
+  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + myCity + '&appid=' + APIKey;
 
   fetch(apiUrl)
   .then(function (response) {
@@ -79,4 +79,57 @@ function ForecastCard(data) {
   console.log("data", data);
   var currentDate = data.dt_text;
   var currentDateFormat = moment(currentDate).format("MM/DD/YYYY");
+
+  var kelvinForecast = data.main.temp;
+  var fahrenheitForecast = ((kelvinForecast - 273.15) * 1.8 + 32).toFixed(0);
+  var avgHumidity = data.main.humidity;
+  var icon = $("<img>").attr(
+    "src",
+    "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
+  );
+  console.log(icon[0]);
+  var iconImage = icon[0].outerHTML;
+  var obj = {
+    date: currentDateFormat,
+    img: iconImage,
+    temp: "Temperature: " + fahrenheitForecast + "&deg;F",
+    humidity: "Humidity: " + avgHumidity + "%",
+  };
+
+  console.log("Current Date:", currentDate);
+  console.log("Date of Index:", moment(currentDate).format("MM/DD/YYYY"));
+
+  return `<div class="card forecast">
+  <div class="card-body">
+  <h5>${obj.date}</h5>
+  <div>${obj.img}</div>
+  <div> ${obj.temp} </div>
+  <div>${obj.humidity}</div>
+</div>
+</div>`;
+}
+
+//fetching and displaying five day forecast
+function displayFiveDayForecast(myCity) {
+  var apiURlForecast = 'https://api.openweathermap.org/data/2.5/forecast?q=' + myCity + '&appid=' + APIKey;
+
+  fetch(apiURlForecast)
+  .then(function (response) {
+    
+    var days = response.list;
+    var fiveDayList = 0;
+
+    $("#forecast-row").empty();
+    for (var i =0; i < fiveDayList < 5; i++) {
+      var timeString = response.list[i].dt_text.split(" ")[1].split(":")[0];
+    
+      if (timeString === "18") {
+        fiveDayList++;
+
+        var div = $("<div class='col-md-2'>").html(ForecastCard(days[i]));
+
+        $("#forecast-row").append(div);
+      }
+    }
+  });
 }
