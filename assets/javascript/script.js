@@ -75,14 +75,13 @@ function displayCurrentWeather (myCity) {
 })
 }
 
-// displays cureent weather dynamicly
+// displays forecasted weather dynamicly
 function ForecastCard(data) {
   console.log("data", data);
   var currentDate = data.dt_text;
   var currentDateFormat = moment(currentDate).format("MM/DD/YYYY");
 
-  var kelvinForecast = data.main.temp;
-  var fahrenheitForecast = ((kelvinForecast - 273.15) * 1.8 + 32).toFixed(0);
+  var temp = Math.floor(data.main.temp) + "°F";
   var avgHumidity = data.main.humidity;
   var icon = $("<img>").attr(
     "src",
@@ -93,7 +92,7 @@ function ForecastCard(data) {
   var obj = {
     date: currentDateFormat,
     img: iconImage,
-    temp: "Temperature: " + fahrenheitForecast + "&deg;F",
+    temp: "Temperature: " + temp,
     humidity: "Humidity: " + avgHumidity + "%",
   };
 
@@ -112,29 +111,25 @@ function ForecastCard(data) {
 
 //fetching and displaying five day forecast
 function displayFiveDayForecast(myCity) {
-  var apiURlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + (myCity || "Nashville") + "&appid=" + APIKey;
+  var apiURlForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + (myCity || "Nashville") + "&units=imperial&appid=" + APIKey;
 
   fetch(apiURlForecast)
   .then(function (response) {
-    response.json().then(function (data) {
-    var days = data.list;
-    var fiveDayList = 0;
-
-    $("#forecast-row").empty();
-    for (var i =0; i < fiveDayList < 5; i++) {
-      var timeString = data.list[i].dt_text.split(" ")[1].split(":")[0];
-    
-      if (timeString === "18") {
-        fiveDayList++;
-
-        var div = $("<div class='col-md-2'>").html(ForecastCard(days[i]));
+    response.json().then(
+      function (data) {
+        $("#forecast-row").empty();
+        for (var i = 4; i < data.list.length; i += 8) {
+      var date = data.list[i];
+     
+        var div = $("<div class='col-md-2'>").html(ForecastCard(data.list[i]));
 
         $("#forecast-row").append(div);
-      }
-    }
+      
+        }  
   });
 })
 }
+
 
 function recordSearchHistory() {
   $(".list-group").empty();
