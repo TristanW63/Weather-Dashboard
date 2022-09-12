@@ -78,11 +78,12 @@ function displayCurrentWeather (myCity) {
 // displays forecasted weather dynamicly
 function ForecastCard(data) {
   console.log("data", data);
-  var currentDate = data.dt_text;
+  var currentDate = data.dt_txt;
   var currentDateFormat = moment(currentDate).format("MM/DD/YYYY");
 
   var temp = Math.floor(data.main.temp) + "°F";
   var avgHumidity = data.main.humidity;
+  var windSpeed = data.wind.speed;
   var icon = $("<img>").attr(
     "src",
     "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
@@ -94,7 +95,8 @@ function ForecastCard(data) {
     img: iconImage,
     temp: "Temperature: " + temp,
     humidity: "Humidity: " + avgHumidity + "%",
-  };
+    windSpeed: "WindSpeed:" + windSpeed,
+    };
 
   console.log("Current Date:", currentDate);
   console.log("Date of Index:", moment(currentDate).format("MM/DD/YYYY"));
@@ -105,6 +107,7 @@ function ForecastCard(data) {
   <div>${obj.img}</div>
   <div> ${obj.temp} </div>
   <div>${obj.humidity}</div>
+  <div>${obj.windSpeed}</div>
 </div>
 </div>`;
 }
@@ -118,9 +121,9 @@ function displayFiveDayForecast(myCity) {
     response.json().then(
       function (data) {
         $("#forecast-row").empty();
-        for (var i = 4; i < data.list.length; i += 8) {
-      var date = data.list[i];
-     
+        for (var i = 5; i < data.list.length; i += 8) {
+      
+     console.log(i)
         var div = $("<div class='col-md-2'>").html(ForecastCard(data.list[i]));
 
         $("#forecast-row").append(div);
