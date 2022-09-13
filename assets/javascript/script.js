@@ -55,25 +55,31 @@ function displayCurrentWeather (myCity) {
   .then(function (response) {
       console.log(response);
       console.log(apiURLuvi);
+      response.json().then(function (data) {
       var newIndex = [
         //dynamicly displays current UV index and wether or not its good or bad
         $("<span>").text("UV Index: "),
-        $("<button>").text(response.value).attr("id", "uv-button"),
+        $("<button>").text(data.value).attr("id", "uv-button"),
       ];
+    
       $(".current-uv").empty();
         $(".current-uv").append(newIndex);
-        if (response.value <= 3) {
+        if (data.value <= 3) {
           //if uv index is low
           $("#uv-button").addClass("btn btn-success");
-        } else if (response.value >= 7) {
+        } else if (data.value >= 7) {
           //if uv index is high
           $("#uv-button").addClass("btn btn-danger");
         } else $("#uv-button").addClass("btn btn-warning");
+      
       })
       .catch(function (error) {});
-  });
+  
+      });
 })
-}
+  }
+  )}
+
 
 // displays forecasted weather dynamicly
 function ForecastCard(data) {
